@@ -1,36 +1,30 @@
 // src/components/layout/Footer.js
-import React from "react";
-import {
-  Box,
-  Grid2,
-  Typography,
-  IconButton,
-  useTheme,
-  Container,
-} from "@mui/material";
+import { Box, Typography, Container, Grid2, IconButton } from "@mui/material";
 import { Facebook, Twitter, Instagram } from "@mui/icons-material";
 
 function Footer() {
-  const theme = useTheme();
-
   return (
     <Box
       component="footer"
       sx={{
-        backgroundColor:
-          theme.palette.mode === "dark" ? "primary.dark" : "primary.main",
-        color: theme.palette.mode === "dark" ? "text.primary" : "common.white",
-        padding: 3,
+        backgroundColor: "primary.main",
+        color: "common.white",
+        padding: 2,
         width: "100%",
-        textAlign: "center",
       }}
     >
       <Container maxWidth="lg">
-        <Grid2 container spacing={3} justifyContent="center">
+        <Grid2
+          container
+          spacing={1}
+          justifyContent={{ xs: "center", md: "space-between" }}
+          flexDirection={{ xs: "column", md: "row" }}
+          alignItems="center"
+        >
           {/* Copyright Text */}
-          <Grid2 xs={12} md={6}>
-            <Typography variant="body1" sx={{ mb: { xs: 2, md: 0 } }}>
-              © 2023 Your Company. All rights reserved.
+          <Grid2 xs={12} md={6} sx={{ textAlign: { xs: "center" } }}>
+            <Typography variant="p">
+              © 2023 JM Blog. All rights reserved.
             </Typography>
           </Grid2>
 
@@ -38,18 +32,16 @@ function Footer() {
           <Grid2
             xs={12}
             md={6}
-            sx={{ display: "flex", justifyContent: "center" }}
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "center" },
+            }}
           >
             <IconButton
               color="inherit"
               href="https://facebook.com"
               target="_blank"
-              sx={{
-                color:
-                  theme.palette.mode === "dark"
-                    ? "text.primary"
-                    : "common.white",
-              }}
+              sx={{ color: "common.white" }}
             >
               <Facebook />
             </IconButton>
@@ -57,12 +49,7 @@ function Footer() {
               color="inherit"
               href="https://twitter.com"
               target="_blank"
-              sx={{
-                color:
-                  theme.palette.mode === "dark"
-                    ? "text.primary"
-                    : "common.white",
-              }}
+              sx={{ color: "common.white" }}
             >
               <Twitter />
             </IconButton>
@@ -70,12 +57,7 @@ function Footer() {
               color="inherit"
               href="https://instagram.com"
               target="_blank"
-              sx={{
-                color:
-                  theme.palette.mode === "dark"
-                    ? "text.primary"
-                    : "common.white",
-              }}
+              sx={{ color: "common.white" }}
             >
               <Instagram />
             </IconButton>

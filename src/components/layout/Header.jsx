@@ -9,18 +9,9 @@ const Header = ({ setDarkMode, darkMode }) => {
   };
 
   return (
-    <Container style={{ background: "none", backgroundBlendMode: "screen" }}>
-      <AppBar
-        position="sticky"
-        style={{
-          background: "none",
-          backgroundBlendMode: "screen",
-          padding: "1rem",
-          border: "none",
-          boxShadow: "none",
-        }}
-      >
-        <Toolbar style={{ background: "none", backgroundBlendMode: "screen" }}>
+    <AppBar position="sticky" sx={{ p: "5px", boxShadow: "none" }}>
+      <Toolbar>
+        <Container maxWidth="lg" sx={{ display: "flex" }}>
           <Typography
             variant="h5"
             component="h1"
@@ -33,18 +24,16 @@ const Header = ({ setDarkMode, darkMode }) => {
           <Button
             className="custom-btn"
             onClick={toggleTheme}
-            style={{
+            sx={{
               color: "#f1f2f3",
               border: "none",
-              backgroundColor: "##272727",
-              boxShadow: "none",
             }}
           >
             {darkMode ? <WbSunnyIcon /> : <BedtimeIcon />}
           </Button>
-        </Toolbar>
-      </AppBar>
-    </Container>
+        </Container>
+      </Toolbar>
+    </AppBar>
   );
 };
 
