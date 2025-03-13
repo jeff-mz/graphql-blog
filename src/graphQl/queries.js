@@ -19,6 +19,9 @@ const GET_BLOG_INFO = gql`
       postCover {
         url
       }
+      postDescription {
+        text
+      }
     }
   }
 `;
