@@ -8,7 +8,6 @@ function Footer() {
       component="footer"
       sx={{
         backgroundColor: "primary.main",
-        color: "common.white",
         padding: 2,
         width: "100%",
       }}
@@ -41,7 +40,6 @@ function Footer() {
               color="inherit"
               href="https://facebook.com"
               target="_blank"
-              sx={{ color: "common.white" }}
             >
               <Facebook />
             </IconButton>
@@ -49,7 +47,6 @@ function Footer() {
               color="inherit"
               href="https://twitter.com"
               target="_blank"
-              sx={{ color: "common.white" }}
             >
               <Twitter />
             </IconButton>
@@ -57,7 +54,6 @@ function Footer() {
               color="inherit"
               href="https://instagram.com"
               target="_blank"
-              sx={{ color: "common.white" }}
             >
               <Instagram />
             </IconButton>

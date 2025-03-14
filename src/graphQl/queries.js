@@ -8,8 +8,9 @@ const GET_BLOG_INFO = gql`
       postTitle
       postSlug
       profile {
-        profileName
-        profileAvatar {
+        authorName
+        authorField
+        authorAvatar {
           url
         }
       }
@@ -25,4 +26,18 @@ const GET_BLOG_INFO = gql`
     }
   }
 `;
-export { GET_BLOG_INFO };
+
+const GET_AUTHOR_INFO = gql`
+  query {
+    authors {
+      authorName
+      id
+      authorAvatar {
+        url
+      }
+      authorField
+    }
+  }
+`;
+
+export { GET_BLOG_INFO, GET_AUTHOR_INFO };

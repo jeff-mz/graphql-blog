@@ -25,7 +25,7 @@ const Header = ({ setDarkMode, darkMode }) => {
             className="custom-btn"
             onClick={toggleTheme}
             sx={{
-              color: "#f1f2f3",
+              color: `${darkMode ? "#f1f2f3" : "#272727"}`,
               border: "none",
             }}
           >

@@ -15,7 +15,7 @@ const Index = ({ children }) => {
     palette: {
       mode: darkMode ? "dark" : "light",
       primary: {
-        main: darkMode ? "#252525" : "#1976d2", // Custom primary color
+        main: darkMode ? "#252525" : "#f1f2f3",
       },
     },
   });
