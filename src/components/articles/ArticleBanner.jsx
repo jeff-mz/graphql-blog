@@ -35,7 +35,12 @@ const ArticleBanner = () => {
   return (
     <Container
       maxWidth="xl"
-      sx={{ borderRadius: "10px", paddingTop: "0", marginTop: "0" }}
+      sx={{
+        padding: "0",
+        borderRadius: "10px",
+        paddingTop: "0",
+        marginTop: "0",
+      }}
     >
       <Box
         sx={{
@@ -66,7 +71,7 @@ const ArticleBanner = () => {
         {/* overlay content */}
         <Box sx={{ position: "relative", zIndex: 1, borderRadius: "10px" }}>
           {/* Title */}
-          <Typography variant="h3" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: 2 }}>
             {postTitle}
           </Typography>
 
