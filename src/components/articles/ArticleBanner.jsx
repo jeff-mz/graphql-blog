@@ -30,8 +30,8 @@ const ArticleBanner = () => {
   }
 
   // valid data
-  const { postTitle, postCover, profile } = blogInfo;
-  const { authorName, authorAvatar, authorField } = profile;
+  const { postTitle, postCover, author } = blogInfo;
+  const { authorName, authorAvatar, authorField } = author;
   return (
     <Container
       maxWidth="xl"

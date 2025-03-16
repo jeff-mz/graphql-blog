@@ -1,10 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { GET_AUTHOR_INFO } from "../../graphQl/queries";
 import { Card, Typography, Avatar, Box, Skeleton } from "@mui/material";
-
+import { capitalizeWords } from "./functions";
 const AuthorCard = () => {
   const { data, loading, error } = useQuery(GET_AUTHOR_INFO);
-
   if (error) {
     return <p>{error.message}</p>;
   }
@@ -46,26 +45,28 @@ const AuthorCard = () => {
             </Box>
           ))
         : // Actual content
-          data.authors.map((author) => (
-            <Box
-              key={author.id}
-              sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
-            >
-              <Avatar
-                src={author.authorAvatar.url}
-                alt={author.authorName}
-                sx={{ width: 56, height: 56, marginRight: 2 }}
-              />
-              <Box>
-                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                  {author.authorName}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {author.authorField}
-                </Typography>
+          data.authors.map((author) => {
+            return (
+              <Box
+                key={author.id}
+                sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
+              >
+                <Avatar
+                  src={author.authorAvatar.url}
+                  alt={author.authorName}
+                  sx={{ width: 56, height: 56, marginRight: 2 }}
+                />
+                <Box>
+                  <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                    {capitalizeWords(author.authorName)}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {capitalizeWords(author.authorField)}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            );
+          })}
     </Card>
   );
 };

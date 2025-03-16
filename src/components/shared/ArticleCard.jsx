@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
+import { Link } from "react-router-dom";
 
 const ArticleCard = ({ post, loading }) => {
   // share button function
@@ -65,14 +66,14 @@ const ArticleCard = ({ post, loading }) => {
   const {
     postTitle,
     postDate,
-    profile: { authorName, authorAvatar },
+    author: { authorName, authorAvatar },
     postCover,
   } = post;
 
   return (
     <Card
       sx={{
-        maxWidth: 345,
+        minWidth: 345,
         height: "380px",
         margin: "10px auto",
         borderRadius: "5px",
@@ -110,6 +111,7 @@ const ArticleCard = ({ post, loading }) => {
         <IconButton aria-label="share" onClick={() => handleShare()}>
           <ShareIcon />
         </IconButton>
+        <Link to="/author/author">Read Article </Link>
       </CardActions>
     </Card>
   );

@@ -21,7 +21,7 @@ function Footer() {
           alignItems="center"
         >
           {/* Copyright Text */}
-          <Grid2 xs={12} md={6} sx={{ textAlign: { xs: "center" } }}>
+          <Grid2 size={{ xs: 12, md: 6 }} sx={{ textAlign: { xs: "center" } }}>
             <Typography variant="p">
               © 2023 JM Blog. All rights reserved.
             </Typography>

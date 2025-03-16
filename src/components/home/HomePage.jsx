@@ -1,4 +1,4 @@
-import { Grid2, Container, Paper, Typography } from "@mui/material";
+import { Grid2, Container } from "@mui/material";
 import Articles from "../articles/Articles";
 import ArticleBanner from "../articles/ArticleBanner";
 import Authors from "../authors/Authors";
