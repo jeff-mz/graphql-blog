@@ -9,10 +9,28 @@ import {
   Skeleton,
   CardMedia,
   Grid2,
+  IconButton,
+  TextField,
+  List,
+  Button,
+  ListItem,
+  ListItemText,
+  Divider,
 } from "@mui/material";
-
+import ShareIcon from "@mui/icons-material/Share";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import { useState } from "react";
 const SingleArticle = () => {
   const { slug } = useParams();
+  const [newComment, setNewComment] = useState("");
+  const [commentList, setCommentList] = useState([]);
+  const handleComments = () => {
+    if (newComment !== "") {
+      setCommentList([...commentList, newComment]);
+      setNewComment("");
+    }
+  };
 
   const { data, loading, error } = useQuery(GET_ARTICLE_INFO, {
     variables: { slug: slug },
@@ -24,6 +42,20 @@ const SingleArticle = () => {
 
   const post = data?.post;
 
+  // share button function
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: post.postTitle,
+          text: `Check out this post by ${post.authorName}: ${post.postTitle}`,
+          url: post.postSlug,
+        });
+      } catch (error) {
+        alert("Error sharing:", error.message);
+      }
+    }
+  };
   return (
     <Container maxWidth="lg">
       <Box sx={{ textAlign: "center", my: "1rem" }}>
@@ -107,6 +139,56 @@ const SingleArticle = () => {
             />
           )}
         </Box>
+        <hr />
+        <Grid2 container>
+          <Grid2 size={12} textAlign="left">
+            <IconButton aria-label="share" onClick={() => handleShare()}>
+              <ShareIcon />
+            </IconButton>
+            <IconButton aria-label="like">
+              <ThumbUpOffAltIcon />
+            </IconButton>
+            <IconButton aria-label="dislike">
+              <ThumbDownOffAltIcon />
+            </IconButton>
+          </Grid2>
+
+          <Grid2>
+            <Box sx={{ maxWidth: 600, margin: "auto", padding: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Comments
+              </Typography>
+
+              {/* Comment Input */}
+              <Box sx={{ display: "flex", gap: 2, marginBottom: 3 }}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Add a comment..."
+                  value={newComment}
+                  onChange={(event) =>
+                    setNewComment((prevState) => [event.target.value])
+                  }
+                />
+                <Button variant="contained" onClick={() => handleComments()}>
+                  Add new comment
+                </Button>
+              </Box>
+
+              {/* Comments List */}
+              <List>
+                {commentList.map((comment, index) => (
+                  <Box key={index}>
+                    <ListItem>
+                      <ListItemText primary={comment} />
+                    </ListItem>
+                    {index < commentList.length - 1 && <Divider />}
+                  </Box>
+                ))}
+              </List>
+            </Box>
+          </Grid2>
+        </Grid2>
       </Box>
     </Container>
   );

@@ -5,30 +5,12 @@ import {
   CardMedia,
   CardActions,
   Avatar,
-  IconButton,
   Skeleton,
   Box,
 } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import { Link } from "react-router-dom";
 
 const ArticleCard = ({ post, loading }) => {
-  // share button function
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: postTitle,
-          text: `Check out this post by ${authorName}: ${postTitle}`,
-          url: post.postSlug,
-        });
-      } catch (error) {
-        alert("Error sharing:", error.message);
-      }
-    }
-  };
-
   // skeleton loading state
   if (loading) {
     return (
@@ -67,6 +49,7 @@ const ArticleCard = ({ post, loading }) => {
   const {
     postTitle,
     postDate,
+    postSlug,
     author: { authorName, authorAvatar, authorSlug },
     postCover,
   } = post;
@@ -106,13 +89,7 @@ const ArticleCard = ({ post, loading }) => {
       />
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share" onClick={() => handleShare()}>
-          <ShareIcon />
-        </IconButton>
-        <Link to={`/article/${authorSlug}`}>Read Article </Link>
+        <Link to={`/article/${postSlug}`}>Read Article </Link>
       </CardActions>
     </Card>
   );
