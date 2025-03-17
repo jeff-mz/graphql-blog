@@ -1,9 +1,10 @@
+import { Link } from "react-router";
 import { useQuery } from "@apollo/client";
-import { GET_AUTHOR_INFO } from "../../graphQl/queries";
-import { Card, Typography, Avatar, Box, Skeleton } from "@mui/material";
 import { capitalizeWords } from "./functions";
-const AuthorCard = () => {
-  const { data, loading, error } = useQuery(GET_AUTHOR_INFO);
+import { GET_AUTHORS_INFO } from "../../graphQl/queries";
+import { Card, Typography, Avatar, Box, Skeleton } from "@mui/material";
+const AuthorsCard = () => {
+  const { data, loading, error } = useQuery(GET_AUTHORS_INFO);
   if (error) {
     return <p>{error.message}</p>;
   }
@@ -57,9 +58,11 @@ const AuthorCard = () => {
                   sx={{ width: 56, height: 56, marginRight: 2 }}
                 />
                 <Box>
-                  <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                    {capitalizeWords(author.authorName)}
-                  </Typography>
+                  <Link to={`/author/${author.authorSlug}`}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                      {capitalizeWords(author.authorName)}
+                    </Typography>{" "}
+                  </Link>
                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {capitalizeWords(author.authorField)}
                   </Typography>
@@ -71,4 +74,4 @@ const AuthorCard = () => {
   );
 };
 
-export default AuthorCard;
+export default AuthorsCard;

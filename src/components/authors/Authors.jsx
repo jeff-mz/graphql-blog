@@ -1,9 +1,9 @@
-import AuthorCard from "../shared/AuthorCard";
+import AuthorsCard from "../shared/AuthorsCard";
 
 const Authors = () => {
   return (
     <div>
-      <AuthorCard />
+      <AuthorsCard />
     </div>
   );
 };

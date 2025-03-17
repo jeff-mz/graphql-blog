@@ -34,7 +34,8 @@ const ArticleCard = ({ post, loading }) => {
     return (
       <Card
         sx={{
-          maxWidth: 345,
+          width: "300px",
+          maxWidth: "345px",
           height: "380px",
           margin: "10px auto",
           borderRadius: "5px",
@@ -66,7 +67,7 @@ const ArticleCard = ({ post, loading }) => {
   const {
     postTitle,
     postDate,
-    author: { authorName, authorAvatar },
+    author: { authorName, authorAvatar, authorSlug },
     postCover,
   } = post;
 
@@ -111,7 +112,7 @@ const ArticleCard = ({ post, loading }) => {
         <IconButton aria-label="share" onClick={() => handleShare()}>
           <ShareIcon />
         </IconButton>
-        <Link to="/author/author">Read Article </Link>
+        <Link to={`/article/${authorSlug}`}>Read Article </Link>
       </CardActions>
     </Card>
   );

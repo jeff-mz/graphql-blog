@@ -22,17 +22,66 @@ const GET_BLOG_INFO = gql`
   }
 `;
 
-const GET_AUTHOR_INFO = gql`
+const GET_AUTHORS_INFO = gql`
   query {
     authors {
       authorAvatar {
         url
       }
       authorName
+      authorSlug
       authorField
       id
     }
   }
 `;
 
-export { GET_BLOG_INFO, GET_AUTHOR_INFO };
+const GET_AUTHOR_INFO = gql`
+  query MyQuery($slug: String) {
+    author(where: { authorSlug: $slug }) {
+      authorField
+      authorName
+      authorSlug
+      authorDescription {
+        text
+      }
+      id
+      authorPosts {
+        ... on Post {
+          postCover {
+            url
+          }
+          postTitle
+          postSlug
+        }
+      }
+      authorAvatar {
+        url
+      }
+    }
+  }
+`;
+
+const GET_ARTICLE_INFO = gql`
+  query MyQuery($slug: String) {
+    post(where: { postSlug: $slug }) {
+      author {
+        authorSlug
+        authorName
+        authorAvatar {
+          url
+        }
+      }
+      postCover {
+        url
+      }
+      postDate
+      postDescription {
+        html
+      }
+      postTitle
+      postSlug
+    }
+  }
+`;
+export { GET_BLOG_INFO, GET_AUTHORS_INFO, GET_AUTHOR_INFO, GET_ARTICLE_INFO };

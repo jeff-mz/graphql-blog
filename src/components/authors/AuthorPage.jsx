@@ -1,122 +1,199 @@
+import { useQuery } from "@apollo/client";
+import { Link, useParams } from "react-router-dom";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardActions from "@mui/material/CardActions";
 import {
   Container,
   Typography,
   Avatar,
   Box,
-  Grid,
   Card,
   CardContent,
   CardMedia,
-  Button,
-  Link,
+  Grid2,
+  Skeleton,
 } from "@mui/material";
+import { GET_AUTHOR_INFO } from "../../graphQl/queries";
+import { capitalizeWords } from "../shared/functions";
 
 const AuthorPage = () => {
-  const author = {
-    name: "John Doe",
-    position: "Senior Writer",
-    avatarUrl: "https://via.placeholder.com/150",
-    about:
-      "John Doe is a seasoned writer with over 10 years of experience in technology and lifestyle blogging. He enjoys exploring new trends and sharing insights with his readers.",
-  };
+  const { slug } = useParams();
 
-  const relatedArticles = [
-    {
-      title: "The Future of Artificial Intelligence",
-      url: "#",
-      coverImage: "https://via.placeholder.com/400x200",
-      description:
-        "Explore how AI is transforming industries and what the future holds for this groundbreaking technology.",
-    },
-    {
-      title: "Top 10 Programming Languages to Learn in 2023",
-      url: "#",
-      coverImage: "https://via.placeholder.com/400x200",
-      description:
-        "Discover the most in-demand programming languages this year and why you should consider learning them.",
-    },
-    {
-      title: "How to Stay Productive While Working Remotely",
-      url: "#",
-      coverImage: "https://via.placeholder.com/400x200",
-      description:
-        "Practical tips and tools to help you stay focused and productive when working from home.",
-    },
-    {
-      title: "The Rise of Quantum Computing",
-      url: "#",
-      coverImage: "https://via.placeholder.com/400x200",
-      description:
-        "Learn about the potential of quantum computing and how it could revolutionize the tech industry.",
-    },
-  ];
+  const { data, loading, error } = useQuery(GET_AUTHOR_INFO, {
+    variables: { slug: slug },
+  });
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const {
+    authorName,
+    authorAvatar,
+    authorField,
+    authorDescription,
+    authorPosts,
+  } = data?.author || {};
 
   return (
-    <Container>
-      {/* Author Section */}
-      <Box sx={{ textAlign: "center", my: 4 }}>
-        <Avatar
-          alt={author.name}
-          src={author.avatarUrl}
-          sx={{ width: 150, height: 150, margin: "auto" }}
-        />
-        <Typography variant="h4" component="h1" sx={{ mt: 2 }}>
-          {author.name}
-        </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
-          {author.position}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ mt: 2, maxWidth: 600, margin: "auto" }}
+    <Container maxWidth="lg">
+      <Box sx={{ textAlign: "center", my: "1rem" }}>
+        <Grid2
+          container
+          sx={{
+            width: "100%",
+            backgroundColor: "primary.main",
+            borderRadius: "10px",
+          }}
         >
-          {author.about}
-        </Typography>
-      </Box>
+          {/* Avatar Skeleton or Avatar */}
+          <Grid2 size={{ xs: 12, sm: 4 }} padding="1rem">
+            {loading ? (
+              <Skeleton
+                variant="circular"
+                width={150}
+                height={150}
+                sx={{ margin: "auto" }}
+              />
+            ) : (
+              <Avatar
+                alt={authorName}
+                src={authorAvatar.url}
+                sx={{ width: 150, height: 150, margin: "auto" }}
+              />
+            )}
+          </Grid2>
 
-      {/* Related Articles Section */}
-      <Box sx={{ mt: 6 }}>
-        <Typography variant="h5" component="h2" sx={{ mb: 3 }}>
-          Related Articles
-        </Typography>
-        <Grid container spacing={3}>
-          {relatedArticles.map((article, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card>
-                {/* Cover Image */}
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={article.coverImage}
-                  alt={article.title}
+          {/* Author Details Skeleton or Author Details */}
+          <Grid2 size={{ xs: 12, sm: 8 }} textAlign="left" padding="1rem">
+            {loading ? (
+              <>
+                <Skeleton
+                  variant="text"
+                  width="60%"
+                  height={40}
+                  sx={{ mt: 2 }}
                 />
-                <CardContent>
-                  {/* Article Title */}
-                  <Typography variant="h6" component="h3" sx={{ mb: 1 }}>
-                    {article.title}
-                  </Typography>
-                  {/* Article Description */}
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    sx={{ mb: 2 }}
+                <Skeleton variant="text" width="40%" height={30} />
+                <Skeleton
+                  variant="text"
+                  width="80%"
+                  height={100}
+                  sx={{ mt: 2 }}
+                />
+              </>
+            ) : (
+              <>
+                <Typography variant="h4" component="h1" sx={{ mt: 2 }}>
+                  {capitalizeWords(authorName)}
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {capitalizeWords(authorField)}
+                </Typography>
+                <Typography
+                  variant="p"
+                  sx={{
+                    mt: 2,
+                    maxWidth: 600,
+                    margin: "auto",
+                    textWrap: "wrap",
+                  }}
+                >
+                  {authorDescription.text}
+                </Typography>
+              </>
+            )}
+          </Grid2>
+        </Grid2>
+
+        {/* Posts Skeleton or Posts */}
+        <Grid2 container sx={{ margin: "1rem 0" }}>
+          {loading
+            ? // Skeleton for posts while loading
+              Array.from({ length: 3 }).map((_, index) => (
+                <Grid2
+                  key={index}
+                  margin="0 auto"
+                  size={{ xs: 12, sm: 6, md: 4 }}
+                >
+                  <Card
+                    sx={{
+                      minWidth: 345,
+                      width: "280px",
+                      height: "350px",
+                      margin: "10px auto",
+                      borderRadius: "5px",
+                      backgroundColor: "primary.main",
+                    }}
                   >
-                    {article.description}
-                  </Typography>
-                  {/* Read Article Button */}
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    href={article.url}
-                    sx={{ textTransform: "none" }}
+                    <CardActionArea>
+                      <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={140}
+                      />
+                      <CardContent>
+                        <Skeleton variant="text" width="80%" height={40} />
+                        <Skeleton variant="text" width="60%" height={30} />
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Skeleton variant="text" width="100px" height={30} />
+                    </CardActions>
+                  </Card>
+                </Grid2>
+              ))
+            : // Actual posts when data is loaded
+              authorPosts.map((post) => (
+                <Grid2
+                  key={post.id}
+                  margin="0 auto"
+                  size={{ xs: 12, sm: 6, md: 4 }}
+                >
+                  <Card
+                    sx={{
+                      minWidth: 345,
+                      width: "280px",
+                      height: "350px",
+                      margin: "10px auto",
+                      borderRadius: "5px",
+                      backgroundColor: "primary.main",
+                    }}
                   >
-                    Read Article
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={post.postCover.url}
+                        alt={post.postTitle}
+                      />
+                      <CardContent>
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          sx={{ fontWeight: "bold" }}
+                          component="p"
+                          height="180"
+                        >
+                          {capitalizeWords(post.postTitle)}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Link
+                        style={{
+                          textDecoration: "none",
+                          color: "main.primary",
+                        }}
+                        to={`/article/${post.postSlug}`}
+                      >
+                        Read Article
+                      </Link>
+                    </CardActions>
+                  </Card>
+                </Grid2>
+              ))}
+        </Grid2>
       </Box>
     </Container>
   );

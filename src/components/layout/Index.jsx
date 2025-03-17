@@ -23,7 +23,7 @@ const Index = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline /> {/* Ensures consistent baseline styles */}
-      <Box sx={{ flexGrow: 1, minWidth: "360px" }}>
+      <Box sx={{ flexGrow: 1, width: "100%", minWidth: "365px" }}>
         {/* Header */}
         <Header setDarkMode={setDarkMode} darkMode={darkMode} />
 
