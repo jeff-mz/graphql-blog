@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { useParams } from "react-router-dom";
 import { GET_ARTICLE_INFO } from "../../graphQl/queries";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -18,131 +19,185 @@ import {
   Divider,
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import { useState } from "react";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import SendIcon from "@mui/icons-material/Send";
+
 const SingleArticle = () => {
   const { slug } = useParams();
   const [newComment, setNewComment] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newUser, setNewUser] = useState({
+    email: "",
+    name: "",
+    comment: "",
+    id: 0,
+  });
+
   const [commentList, setCommentList] = useState([]);
-  const handleComments = () => {
-    if (newComment !== "") {
-      setCommentList([...commentList, newComment]);
-      setNewComment("");
-    }
-  };
+  const navigator = useNavigate();
 
   const { data, loading, error } = useQuery(GET_ARTICLE_INFO, {
     variables: { slug: slug },
   });
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  const handleComments = () => {
+    const newCommentObj = {
+      email: newEmail,
+      comment: newComment,
+      name: newName,
+      id: newUser.id + 1,
+    };
 
-  const post = data?.post;
+    setCommentList((prevComments) => [...prevComments, newCommentObj]);
+    setNewUser((prevState) => ({ ...prevState, id: prevState.id + 1 }));
+    setNewComment("");
+    setNewName("");
+    setNewEmail("");
+  };
 
-  // share button function
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
           title: post.postTitle,
-          text: `Check out this post by ${post.authorName}: ${post.postTitle}`,
-          url: post.postSlug,
+          text: `Check out this post by ${post.author.authorName}: ${post.postTitle}`,
+          url: window.location.href,
         });
       } catch (error) {
         alert("Error sharing:", error.message);
       }
+    } else {
+      alert("Web Share API is not supported in your browser.");
     }
   };
-  return (
-    <Container maxWidth="lg">
-      <Box sx={{ textAlign: "center", my: "1rem" }}>
-        {/* Post Cover Skeleton or Post Cover */}
-        {loading ? (
-          <Skeleton variant="rectangular" width="100%" height={400} />
-        ) : (
-          <CardMedia
-            component="img"
-            height="400"
-            image={post.postCover.url}
-            alt={post.postTitle}
-          />
-        )}
 
-        {/* Post Title Skeleton or Post Title */}
-        <Box sx={{ mt: 4 }}>
-          {loading ? (
+  if (error) {
+    return <Typography variant="h6">Error: {error.message}</Typography>;
+  }
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg">
+        <Box sx={{ textAlign: "center", my: "1rem" }}>
+          <Skeleton variant="rectangular" width="100px" height="30px" />
+          <Skeleton variant="rectangular" width="100%" height={400} />
+          <Box sx={{ mt: 4 }}>
             <Skeleton
               variant="text"
               width="60%"
               height={60}
               sx={{ margin: "auto" }}
             />
-          ) : (
-            <Typography
-              variant="h3"
-              fontWeight="bold"
-              sx={{ textWrap: "wrap", wordWrap: "break-word" }}
-              component="h1"
-              gutterBottom
-            >
-              {post.postTitle}
-            </Typography>
-          )}
-        </Box>
-
-        {/* Author Details Skeleton or Author Details */}
-        <Grid2 container spacing={2} sx={{ mt: 2, alignItems: "center" }}>
-          <Grid2 item xs={12} sm={2}>
-            {loading ? (
-              <Skeleton variant="circular" width={80} height={80} />
-            ) : (
-              <Avatar
-                alt={post.author.authorName}
-                src={post.author.authorAvatar.url}
-                sx={{ width: 50, height: 50 }}
-              />
-            )}
+          </Box>
+          <Grid2
+            container
+            spacing={2}
+            maxWidth="lg"
+            sx={{ mt: 2, alignItems: "center" }}
+          ></Grid2>
+          <Box sx={{ my: 4, textAlign: "left" }}>
+            <Skeleton variant="text" width="100%" height={30} />
+            <Skeleton variant="text" width="100%" height={30} />
+            <Skeleton variant="text" width="80%" height={30} />
+          </Box>
+          <Grid2 container>
+            <Grid2 size={12} textAlign="left">
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Skeleton variant="circular" width={40} height={40} />
+                <Skeleton variant="circular" width={40} height={40} />
+                <Skeleton variant="circular" width={40} height={40} />
+              </Box>
+            </Grid2>
+            <Grid2>
+              <Box sx={{ maxWidth: 600, margin: "auto", padding: 2 }}>
+                <Typography variant="h6" gutterBottom>
+                  <Skeleton variant="text" width={100} />
+                </Typography>
+                <Box sx={{ display: "flex", gap: 2, marginBottom: 3 }}>
+                  <Skeleton variant="rectangular" width="100%" height={56} />
+                  <Skeleton variant="rectangular" width={120} height={56} />
+                </Box>
+              </Box>
+            </Grid2>
           </Grid2>
-          <Grid2 item xs={12} sm={10} textAlign="left">
-            {loading ? (
-              <>
-                <Skeleton variant="text" width="40%" height={30} />
-                <Skeleton variant="text" width="30%" height={20} />
-              </>
-            ) : (
-              <>
-                <Typography variant="h6" component="h2">
-                  {post.author.authorName}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {new Date(post.postDate).toLocaleDateString()}
-                </Typography>
-              </>
-            )}
+        </Box>
+      </Container>
+    );
+  }
+
+  const post = data?.post;
+  if (!post) {
+    return <Typography variant="h6">Article not found.</Typography>;
+  }
+
+  return (
+    <Container maxWidth="lg">
+      <Box sx={{ textAlign: "center", my: "1rem" }}>
+        <button
+          style={{
+            textAlign: "left",
+            margin: "1rem 0rem ",
+            background: "none",
+            border: "none",
+            alignSelf: "flex-start",
+            display: "flex",
+            cursor: "pointer",
+          }}
+          onClick={() => navigator(-1)}
+        >
+          <ArrowBackIcon />
+        </button>
+        <CardMedia
+          component="img"
+          height="400"
+          image={post.postCover.url}
+          alt={post.postTitle}
+        />
+        <Box sx={{ mt: 4 }}>
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            sx={{ textWrap: "wrap", wordWrap: "break-word" }}
+            component="h1"
+            gutterBottom
+          >
+            {post.postTitle}
+          </Typography>
+        </Box>
+        <Grid2
+          container
+          spacing={2}
+          maxWidth="lg"
+          sx={{ mt: 2, alignItems: "center" }}
+        >
+          <Grid2 item xs={12} sm={10} textAlign="left" display={"flex"}>
+            <Avatar
+              alt={post.author.authorName}
+              src={post.author.authorAvatar.url}
+              sx={{ width: 50, height: 50, marginRight: "14px" }}
+            />
+            <Box>
+              <Typography variant="h6" component="h2">
+                {post.author.authorName}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {post.postDate}
+              </Typography>
+            </Box>
           </Grid2>
         </Grid2>
-
-        {/* Post Description Skeleton or Post Description */}
         <Box sx={{ my: 4, textAlign: "left" }}>
-          {loading ? (
-            <>
-              <Skeleton variant="text" width="100%" height={30} />
-              <Skeleton variant="text" width="100%" height={30} />
-              <Skeleton variant="text" width="80%" height={30} />
-            </>
-          ) : (
-            <div
-              dangerouslySetInnerHTML={{ __html: post.postDescription.html }}
-            />
-          )}
+          <div
+            dangerouslySetInnerHTML={{ __html: post.postDescription.html }}
+          />
         </Box>
         <hr />
         <Grid2 container>
           <Grid2 size={12} textAlign="left">
-            <IconButton aria-label="share" onClick={() => handleShare()}>
+            <IconButton aria-label="share" onClick={handleShare}>
               <ShareIcon />
             </IconButton>
             <IconButton aria-label="like">
@@ -152,35 +207,130 @@ const SingleArticle = () => {
               <ThumbDownOffAltIcon />
             </IconButton>
           </Grid2>
-
           <Grid2>
-            <Box sx={{ maxWidth: 600, margin: "auto", padding: 2 }}>
-              <Typography variant="h6" gutterBottom>
+            <Box sx={{ margin: "auto" }}>
+              <Typography textAlign={"left"} variant="h6" gutterBottom>
                 Comments
               </Typography>
-
-              {/* Comment Input */}
-              <Box sx={{ display: "flex", gap: 2, marginBottom: 3 }}>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Add a comment..."
-                  value={newComment}
-                  onChange={(event) =>
-                    setNewComment((prevState) => [event.target.value])
-                  }
-                />
-                <Button variant="contained" onClick={() => handleComments()}>
-                  Add new comment
-                </Button>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  py: 2,
+                }}
+              >
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleComments();
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    label="Your Name"
+                    name="name"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    margin="normal"
+                    required
+                    variant="outlined"
+                    placeholder="Enter your name"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": {
+                          borderColor: "#667eea",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#667eea",
+                        },
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Your Email"
+                    name="email"
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    margin="normal"
+                    required
+                    variant="outlined"
+                    placeholder="Enter your email"
+                    helperText="We'll never share your email"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": {
+                          borderColor: "#667eea",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#667eea",
+                        },
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Your Comment"
+                    name="comment"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    margin="normal"
+                    required
+                    multiline
+                    rows={6}
+                    variant="outlined"
+                    placeholder="Share your thoughts..."
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": {
+                          borderColor: "#667eea",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#667eea",
+                        },
+                      },
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    endIcon={<SendIcon size={12} />}
+                    sx={{
+                      mt: 4,
+                      py: 1,
+                      borderRadius: "12px",
+                      textTransform: "none",
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                      transition: "all 0.3s ease-in-out",
+                      width: "200px",
+                      display: "flex",
+                      alignSelf: "flex-start",
+                      "&:hover": {
+                        boxShadow: "0 8px 20px rgba(225, 219, 231, 0.3)",
+                      },
+                    }}
+                  >
+                    Send Comment
+                  </Button>
+                </form>
               </Box>
-
-              {/* Comments List */}
               <List>
                 {commentList.map((comment, index) => (
                   <Box key={index}>
                     <ListItem>
-                      <ListItemText primary={comment} />
+                      <ListItemText
+                        primary={comment.name}
+                        secondary={
+                          <>
+                            <Typography variant="body1">
+                              {comment.comment}
+                            </Typography>
+                          </>
+                        }
+                      />
                     </ListItem>
                     {index < commentList.length - 1 && <Divider />}
                   </Box>

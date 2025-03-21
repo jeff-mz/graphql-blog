@@ -1,10 +1,11 @@
+import { Box, Grid2, Typography } from "@mui/material";
 import AuthorsCard from "../shared/AuthorsCard";
 
 const Authors = () => {
   return (
-    <div>
+    <Box>
       <AuthorsCard />
-    </div>
+    </Box>
   );
 };
 

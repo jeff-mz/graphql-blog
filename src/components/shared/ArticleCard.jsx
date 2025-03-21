@@ -57,7 +57,8 @@ const ArticleCard = ({ post, loading }) => {
   return (
     <Card
       sx={{
-        minWidth: 345,
+        width: "280px",
+        minWidth: "300px",
         height: "380px",
         margin: "10px auto",
         borderRadius: "5px",

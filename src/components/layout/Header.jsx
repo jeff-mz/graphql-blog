@@ -1,7 +1,7 @@
 import { AppBar, Button, Toolbar, Typography, Container } from "@mui/material";
 import BedtimeIcon from "@mui/icons-material/Bedtime";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
-
+import { Link } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 const Header = ({ setDarkMode, darkMode }) => {
   const toggleTheme = () => {
@@ -19,7 +19,9 @@ const Header = ({ setDarkMode, darkMode }) => {
             style={{ background: "none" }}
             fontWeight="500"
           >
-            JM Blog
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              JM Blog
+            </Link>
           </Typography>
           <Button
             className="custom-btn"

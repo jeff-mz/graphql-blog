@@ -1,6 +1,6 @@
-![screen shot](public/screenshot.png)
-
 # Blog Application with Hygraph CMS
+
+![alt text](public/screenshot.png)
 
 This is a React-based blog application that takes blog posts from **Hygraph
 CMS** using **GraphQL**.

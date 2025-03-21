@@ -9,6 +9,9 @@ const GET_BLOG_INFO = gql`
       }
       postDate
       postSlug
+      postDescription {
+        html
+      }
       postTitle
       author {
         authorAvatar {
