@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_BLOG_INFO } from "../../graphQl/queries"; // Use your query
 import { Box, Typography, Avatar, Skeleton } from "@mui/material";
-import { Link, Links } from "react-router";
+import { Link } from "react-router";
 
 // Utility function to truncate text to 5 words
 const truncateDescription = (html) => {
@@ -27,9 +27,9 @@ const MostRead = () => {
   return (
     <Box
       sx={{
-        // padding: "2rem",
-        backgroundColor: "background.paper",
+        padding: "1rem",
         borderRadius: "10px",
+        backgroundColor: "primary.main",
       }}
     >
       {/* section heading */}
@@ -85,6 +85,7 @@ const MostRead = () => {
                   flexDirection: { xs: "column", sm: "row" }, // Column on small devices, row on larger
                   gap: 3,
                   marginBottom: 4,
+                  padding: ".5rem",
                 }}
               >
                 {/* cover photo */}

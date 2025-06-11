@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Box, CssBaseline } from "@mui/material";
 import Header from "./Header";
 import Footer from "./Footer";
 
 const Index = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme ? JSON.parse(savedTheme) === "dark" : false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("theme", JSON.stringify(darkMode ? "dark" : "light"));
+  }, [darkMode]);
 
   // Create theme with dark/light mode
   const theme = createTheme({
@@ -19,16 +26,17 @@ const Index = ({ children }) => {
       },
     },
   });
-
+  const toggleTheme = () => {
+    setDarkMode((prevState) => !prevState);
+  };
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline /> {/* Ensures consistent baseline styles */}
       <Box sx={{ flexGrow: 1, width: "100%", minWidth: "365px" }}>
         {/* Header */}
-        <Header setDarkMode={setDarkMode} darkMode={darkMode} />
+        <Header toggleTheme={toggleTheme} isDark={darkMode} />
 
         {/* Main content */}
-        {/* <HomePage /> */}
         {children}
 
         {/* Footer */}

@@ -1,38 +1,64 @@
-import { AppBar, Button, Toolbar, Typography, Container } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  Toolbar,
+  Typography,
+  Container,
+  IconButton,
+} from "@mui/material";
 import BedtimeIcon from "@mui/icons-material/Bedtime";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import { Link } from "react-router-dom";
-// eslint-disable-next-line react/prop-types
-const Header = ({ setDarkMode, darkMode }) => {
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
 
+const Header = ({ isDark, toggleTheme }) => {
   return (
-    <AppBar position="sticky" sx={{ p: "5px", boxShadow: "none" }}>
+    <AppBar
+      position="sticky"
+      sx={{
+        p: "5px",
+        boxShadow: "none",
+        background: "transparent",
+        backdropFilter: "blur(8px)",
+        backgroundColor: isDark
+          ? "rgba(0, 0, 0, 0.7)"
+          : "rgba(255, 255, 255, 0.7)",
+      }}
+    >
       <Toolbar>
-        <Container maxWidth="lg" sx={{ display: "flex" }}>
-          <Typography
-            variant="h5"
-            component="h1"
-            flexGrow="1"
-            style={{ background: "none" }}
-            fontWeight="500"
-          >
-            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+        <Container maxWidth="lg" sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="h5" component="h1" flexGrow={1} fontWeight="500">
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
               JM Blog
             </Link>
           </Typography>
-          <Button
-            className="custom-btn"
+
+          <IconButton
             onClick={toggleTheme}
+            color="inherit"
+            aria-label="toggle theme"
             sx={{
-              color: `${darkMode ? "#f1f2f3" : "#272727"}`,
-              border: "none",
+              "&:hover": {
+                backgroundColor: isDark
+                  ? "rgba(144, 202, 249, 0.08)"
+                  : "rgba(25, 118, 210, 0.08)",
+              },
             }}
           >
-            {darkMode ? <WbSunnyIcon /> : <BedtimeIcon />}
-          </Button>
+            {isDark ? (
+              <WbSunnyIcon sx={{ color: "#ffb74d" }} />
+            ) : (
+              <BedtimeIcon sx={{ color: "#5c6bc0" }} />
+            )}
+          </IconButton>
         </Container>
       </Toolbar>
     </AppBar>
