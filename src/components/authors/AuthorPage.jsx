@@ -15,7 +15,6 @@ import {
   Chip,
   Divider,
   Button,
-  Stack,
 } from "@mui/material";
 import { GET_AUTHOR_INFO } from "../../graphQl/queries";
 import { capitalizeWords } from "../shared/functions";

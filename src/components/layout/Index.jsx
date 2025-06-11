@@ -10,11 +10,12 @@ const Index = ({ children }) => {
     return savedTheme ? JSON.parse(savedTheme) === "dark" : false;
   });
 
+  // set theme to local storage
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify(darkMode ? "dark" : "light"));
   }, [darkMode]);
 
-  // Create theme with dark/light mode
+  // create theme with dark/light mode
   const theme = createTheme({
     typography: {
       fontFamily: `"Rubik", sans-serif, Arial, Helvetica`,
@@ -31,7 +32,7 @@ const Index = ({ children }) => {
   };
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline /> {/* Ensures consistent baseline styles */}
+      <CssBaseline /> {/*base style */}
       <Box sx={{ flexGrow: 1, width: "100%", minWidth: "365px" }}>
         {/* Header */}
         <Header toggleTheme={toggleTheme} isDark={darkMode} />
